@@ -1,0 +1,13 @@
+This folder will contain your BondSpace.apk after the first GitHub Actions build.
+
+HOW TO GET THE APK:
+1. Push your code to GitHub (main branch)
+2. GitHub Actions will automatically build the APK
+3. Download it from: https://github.com/Ashwinjauhary/bondspace/releases/latest
+4. Rename to BondSpace.apk and place it here next to this file
+5. The landing page (landing/index.html) will serve it for download
+
+OR to build locally:
+  cd ../frontend
+  npm run cap:build-apk
+  copy android\app\build\outputs\apk\debug\app-debug.apk BondSpace.apk
