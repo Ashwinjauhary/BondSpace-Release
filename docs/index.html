@@ -7,6 +7,9 @@
     <title>BondSpace — Your Private Digital Universe</title>
     <meta name="description"
         content="BondSpace is the private, encrypted relationship super-app for couples and close friends. Chat, play games, share locations, and grow together." />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -248,10 +251,11 @@
         }
 
         .hero h1 .gradient {
-            background: linear-gradient(135deg, var(--pink) 0%, var(--purple) 60%, #60a5fa 100%);
+            background: linear-gradient(135deg, #fff 0%, #a855f7 50%, var(--pink) 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(168, 85, 247, 0.4);
         }
 
         .hero-sub {
@@ -925,15 +929,8 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-logo">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <path d="M14 23s-8-5-8-11a6 6 0 0 1 8-5.7A6 6 0 0 1 22 12c0 6-8 11-8 11Z" fill="url(#hg)" />
-                <defs>
-                    <linearGradient id="hg" x1="6" y1="6" x2="22" y2="23" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#ff6b9d" />
-                        <stop offset="1" stop-color="#a855f7" />
-                    </linearGradient>
-                </defs>
-            </svg>
+            <img src="logo.png" alt="BondSpace Logo" width="32" height="32"
+                style="border-radius: 8px; box-shadow: 0 0 15px rgba(255, 107, 157, 0.4);" />
             BondSpace
         </div>
         <div class="nav-links">
@@ -1267,7 +1264,7 @@
                         </div>
                         <div>
                             <h3
-                                style="font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 4px; background: linear-gradient(135deg, #fff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                                style="font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 4px; background: linear-gradient(135deg, #fff, #a855f7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
                                 Ashwin Jauhary</h3>
                             <p style="color: var(--muted); font-size: 16px; font-weight: 500;">Full Stack Developer |
                                 BCA Student</p>
