@@ -1,712 +1,1277 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BondSpace — Your Private Digital Universe</title>
-  <meta name="description" content="BondSpace is the private, encrypted relationship super-app for couples and close friends. Chat, play games, share locations, and grow together." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BondSpace — Your Private Digital Universe</title>
+    <meta name="description"
+        content="BondSpace is the private, encrypted relationship super-app for couples and close friends. Chat, play games, share locations, and grow together." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    :root {
-      --pink: #ff6b9d;
-      --pink-deep: #e0417f;
-      --purple: #a855f7;
-      --purple-deep: #7c3aed;
-      --rose: #fb7185;
-      --bg: #050510;
-      --bg2: #0a0a1f;
-      --card: rgba(255,255,255,0.04);
-      --card-border: rgba(255,255,255,0.08);
-      --text: #f0e6ff;
-      --muted: #9d8fbf;
-      --glow-pink: rgba(255,107,157,0.25);
-      --glow-purple: rgba(168,85,247,0.2);
-    }
+        :root {
+            --pink: #ff6b9d;
+            --pink-deep: #e0417f;
+            --purple: #a855f7;
+            --purple-deep: #7c3aed;
+            --rose: #fb7185;
+            --bg: #050510;
+            --bg2: #0a0a1f;
+            --card: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text: #f0e6ff;
+            --muted: #9d8fbf;
+            --glow-pink: rgba(255, 107, 157, 0.25);
+            --glow-purple: rgba(168, 85, 247, 0.2);
+        }
 
-    html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
 
-    /* ─── ANIMATED BACKGROUND ─── */
-    .bg-orbs {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      overflow: hidden;
-    }
-    .orb {
-      position: absolute; border-radius: 50%;
-      filter: blur(120px); opacity: 0.35;
-      animation: float 12s ease-in-out infinite;
-    }
-    .orb-1 { width: 600px; height: 600px; background: var(--pink); top: -200px; left: -200px; animation-delay: 0s; }
-    .orb-2 { width: 500px; height: 500px; background: var(--purple); bottom: -150px; right: -150px; animation-delay: -4s; }
-    .orb-3 { width: 400px; height: 400px; background: #4f46e5; top: 40%; left: 50%; animation-delay: -8s; }
+        /* ─── ANIMATED BACKGROUND ─── */
+        .bg-orbs {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
 
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(30px, -40px) scale(1.05); }
-      66% { transform: translate(-20px, 20px) scale(0.97); }
-    }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.35;
+            animation: float 12s ease-in-out infinite;
+        }
 
-    /* ─── NAV ─── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 40px;
-      background: rgba(5,5,16,0.7);
-      backdrop-filter: blur(24px);
-      border-bottom: 1px solid var(--card-border);
-    }
-    .nav-logo {
-      display: flex; align-items: center; gap: 10px;
-      font-family: 'Sora', sans-serif; font-weight: 800; font-size: 22px;
-      background: linear-gradient(135deg, var(--pink), var(--purple));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .nav-logo svg { flex-shrink: 0; }
-    .nav-links { display: flex; gap: 32px; }
-    .nav-links a {
-      color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500;
-      transition: color .2s;
-    }
-    .nav-links a:hover { color: var(--text); }
-    .nav-cta {
-      padding: 10px 22px; border-radius: 50px;
-      background: linear-gradient(135deg, var(--pink), var(--purple));
-      color: #fff; text-decoration: none; font-weight: 600; font-size: 14px;
-      transition: transform .2s, box-shadow .2s;
-      box-shadow: 0 4px 24px var(--glow-pink);
-    }
-    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--glow-pink); }
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--pink);
+            top: -200px;
+            left: -200px;
+            animation-delay: 0s;
+        }
 
-    /* ─── LAYOUT ─── */
-    main { position: relative; z-index: 1; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-    section { padding: 100px 0; }
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--purple);
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -4s;
+        }
 
-    /* ─── HERO ─── */
-    .hero {
-      min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      text-align: center; padding: 140px 24px 80px;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 16px; border-radius: 50px;
-      background: rgba(255,107,157,0.1); border: 1px solid rgba(255,107,157,0.3);
-      font-size: 13px; font-weight: 500; color: var(--pink);
-      margin-bottom: 28px;
-    }
-    .hero-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--pink); animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(.8); } }
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: #4f46e5;
+            top: 40%;
+            left: 50%;
+            animation-delay: -8s;
+        }
 
-    .hero h1 {
-      font-family: 'Sora', sans-serif; font-size: clamp(48px, 8vw, 96px);
-      font-weight: 900; line-height: 1.0; letter-spacing: -2px;
-      margin-bottom: 12px;
-    }
-    .hero h1 .gradient {
-      background: linear-gradient(135deg, var(--pink) 0%, var(--purple) 60%, #60a5fa 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .hero-sub {
-      font-size: clamp(17px, 2.5vw, 22px); color: var(--muted);
-      max-width: 560px; margin: 0 auto 48px; font-weight: 400; line-height: 1.6;
-    }
-    .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        @keyframes float {
 
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 10px;
-      padding: 16px 34px; border-radius: 50px; text-decoration: none;
-      background: linear-gradient(135deg, var(--pink), var(--purple));
-      color: #fff; font-weight: 700; font-size: 16px;
-      box-shadow: 0 8px 40px var(--glow-pink);
-      transition: transform .2s, box-shadow .2s;
-    }
-    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 56px var(--glow-pink); }
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
 
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 10px;
-      padding: 16px 34px; border-radius: 50px; text-decoration: none;
-      background: var(--card); border: 1px solid var(--card-border);
-      color: var(--text); font-weight: 600; font-size: 16px;
-      transition: background .2s, border-color .2s, transform .2s;
-      backdrop-filter: blur(12px);
-    }
-    .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); transform: translateY(-3px); }
+            33% {
+                transform: translate(30px, -40px) scale(1.05);
+            }
 
-    /* ─── PHONE MOCKUP ─── */
-    .hero-phone-wrapper {
-      margin: 64px auto 0;
-      position: relative; width: 280px;
-    }
-    .phone-shell {
-      width: 280px; height: 560px; border-radius: 42px;
-      border: 2px solid rgba(255,255,255,0.15);
-      background: linear-gradient(160deg, #1a0a2e, #0d0a1f);
-      box-shadow:
-        0 0 0 1px rgba(0,0,0,.5),
-        0 40px 120px rgba(168,85,247,.4),
-        0 0 80px rgba(255,107,157,.2),
-        inset 0 1px 0 rgba(255,255,255,.12);
-      overflow: hidden; position: relative;
-      animation: phoneFloat 4s ease-in-out infinite;
-    }
-    @keyframes phoneFloat {
-      0%,100% { transform: translateY(0) rotate(-1deg); }
-      50% { transform: translateY(-14px) rotate(1deg); }
-    }
-    .phone-screen {
-      position: absolute; inset: 12px; border-radius: 32px;
-      background: linear-gradient(160deg, #0f0a1e, #1a0530);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 12px; overflow: hidden;
-    }
-    .phone-notch {
-      position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
-      width: 90px; height: 26px; background: #000; border-radius: 50px; z-index: 10;
-    }
-    .phone-ui-item {
-      display: flex; gap: 8px; align-items: center;
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px; padding: 12px 16px; width: 220px;
-    }
-    .phone-avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--pink), var(--purple));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
-    }
-    .phone-text { flex: 1; }
-    .phone-name { font-size: 11px; font-weight: 600; color: var(--text); }
-    .phone-msg { font-size: 10px; color: var(--muted); margin-top: 2px; }
-    .phone-heart { font-size: 18px; animation: heartbeat 1.5s ease-in-out infinite; }
-    @keyframes heartbeat { 0%,100% { transform:scale(1); } 50% { transform:scale(1.3); } }
+            66% {
+                transform: translate(-20px, 20px) scale(0.97);
+            }
+        }
 
-    .phone-stats {
-      display: flex; gap: 8px; width: 220px;
-    }
-    .phone-stat {
-      flex: 1; background: rgba(255,107,157,0.1); border: 1px solid rgba(255,107,157,0.2);
-      border-radius: 12px; padding: 10px 8px; text-align: center;
-    }
-    .phone-stat-num { font-size: 16px; font-weight: 800; color: var(--pink); }
-    .phone-stat-label { font-size: 9px; color: var(--muted); margin-top: 2px; }
+        /* ─── NAV ─── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 40px;
+            background: rgba(5, 5, 16, 0.7);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--card-border);
+        }
 
-    /* ─── STATS BAR ─── */
-    .stats-bar {
-      display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
-      padding: 48px 24px; border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border);
-      background: rgba(255,255,255,0.01);
-    }
-    .stat-item { text-align: center; }
-    .stat-num {
-      font-family: 'Sora', sans-serif; font-size: 42px; font-weight: 800;
-      background: linear-gradient(135deg, var(--pink), var(--purple));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .stat-label { font-size: 14px; color: var(--muted); margin-top: 4px; }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    /* ─── SECTION HEADER ─── */
-    .section-header { text-align: center; margin-bottom: 64px; }
-    .section-tag {
-      display: inline-block; padding: 5px 14px; border-radius: 50px;
-      background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.25);
-      font-size: 13px; font-weight: 600; color: var(--purple); letter-spacing: .5px;
-      text-transform: uppercase; margin-bottom: 18px;
-    }
-    .section-title {
-      font-family: 'Sora', sans-serif; font-size: clamp(32px, 5vw, 52px);
-      font-weight: 800; line-height: 1.15; margin-bottom: 16px;
-    }
-    .section-title .hl {
-      background: linear-gradient(135deg, var(--pink), var(--purple));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .section-desc { font-size: 18px; color: var(--muted); max-width: 520px; margin: 0 auto; line-height: 1.65; }
+        .nav-logo svg {
+            flex-shrink: 0;
+        }
 
-    /* ─── FEATURES GRID ─── */
-    .features-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .feature-card {
-      background: var(--card); border: 1px solid var(--card-border);
-      border-radius: 24px; padding: 32px;
-      backdrop-filter: blur(12px);
-      transition: transform .3s, border-color .3s, box-shadow .3s;
-      position: relative; overflow: hidden;
-    }
-    .feature-card::before {
-      content: ''; position: absolute; inset: 0; border-radius: 24px;
-      background: linear-gradient(135deg, var(--glow-pink), transparent 60%);
-      opacity: 0; transition: opacity .3s;
-    }
-    .feature-card:hover { transform: translateY(-6px); border-color: rgba(255,107,157,0.3); }
-    .feature-card:hover::before { opacity: 1; }
-    .feature-card:hover { box-shadow: 0 20px 60px rgba(255,107,157,.15); }
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
 
-    .feature-icon {
-      width: 56px; height: 56px; border-radius: 16px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px; margin-bottom: 20px;
-      background: linear-gradient(135deg, rgba(255,107,157,.15), rgba(168,85,247,.15));
-      border: 1px solid rgba(255,107,157,.2);
-    }
-    .feature-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
-    .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.65; }
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color .2s;
+        }
 
-    /* ─── OTA SECTION ─── */
-    .ota-section { background: rgba(10,10,30,0.4); border-radius: 32px; padding: 64px; margin: 0 24px; }
-    .ota-flow {
-      display: flex; gap: 0; flex-wrap: wrap; justify-content: center;
-      margin-top: 48px;
-    }
-    .ota-step {
-      display: flex; flex-direction: column; align-items: center; text-align: center;
-      width: 160px; position: relative;
-    }
-    .ota-step-icon {
-      width: 64px; height: 64px; border-radius: 50%;
-      background: linear-gradient(135deg, rgba(255,107,157,.15), rgba(168,85,247,.2));
-      border: 2px solid rgba(255,107,157,.3);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px; margin-bottom: 14px;
-      box-shadow: 0 0 30px rgba(255,107,157,.15);
-    }
-    .ota-step-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
-    .ota-step-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
-    .ota-arrow {
-      display: flex; align-items: center; padding: 0 8px; padding-bottom: 40px;
-      color: var(--pink); font-size: 24px; flex-shrink: 0;
-    }
+        .nav-links a:hover {
+            color: var(--text);
+        }
 
-    /* ─── GAMES ─── */
-    .games-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 12px;
-    }
-    .game-chip {
-      background: var(--card); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 14px 16px;
-      display: flex; gap: 10px; align-items: center;
-      font-size: 13px; font-weight: 500;
-      transition: background .2s, border-color .2s, transform .2s;
-    }
-    .game-chip:hover { background: rgba(255,255,255,.08); border-color: rgba(255,107,157,.3); transform: translateY(-3px); }
-    .game-chip .game-emoji { font-size: 20px; }
+        .nav-cta {
+            padding: 10px 22px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: transform .2s, box-shadow .2s;
+            box-shadow: 0 4px 24px var(--glow-pink);
+        }
 
-    /* ─── TECH STACK ─── */
-    .tech-badges { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-    .badge {
-      padding: 8px 18px; border-radius: 50px; font-size: 13px; font-weight: 600;
-      border: 1px solid var(--card-border); background: var(--card);
-      backdrop-filter: blur(8px);
-      transition: border-color .2s, transform .2s;
-    }
-    .badge:hover { border-color: rgba(255,107,157,.4); transform: translateY(-2px); }
-    .badge.accent { border-color: rgba(255,107,157,.3); color: var(--pink); background: rgba(255,107,157,.07); }
-    .badge.purple { border-color: rgba(168,85,247,.3); color: var(--purple); background: rgba(168,85,247,.07); }
-    .badge.blue { border-color: rgba(96,165,250,.3); color: #60a5fa; background: rgba(96,165,250,.07); }
-    .badge.green { border-color: rgba(52,211,153,.3); color: #34d399; background: rgba(52,211,153,.07); }
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px var(--glow-pink);
+        }
 
-    /* ─── DOWNLOAD ─── */
-    .download-section {
-      text-align: center;
-      background: linear-gradient(135deg, rgba(255,107,157,.08), rgba(168,85,247,.08));
-      border: 1px solid var(--card-border); border-radius: 32px;
-      padding: 80px 40px; margin: 0 24px;
-      position: relative; overflow: hidden;
-    }
-    .download-section::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse at center, rgba(255,107,157,.1) 0%, transparent 70%);
-    }
-    .download-section h2 {
-      font-family: 'Sora', sans-serif; font-size: clamp(32px, 5vw, 52px);
-      font-weight: 800; margin-bottom: 16px;
-    }
-    .download-section p { font-size: 18px; color: var(--muted); margin-bottom: 40px; }
-    .dl-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        /* ─── LAYOUT ─── */
+        main {
+            position: relative;
+            z-index: 1;
+        }
 
-    .btn-dl {
-      display: inline-flex; align-items: center; gap: 12px;
-      padding: 18px 36px; border-radius: 50px; text-decoration: none;
-      font-weight: 700; font-size: 16px; transition: all .25s;
-    }
-    .btn-dl.apk {
-      background: linear-gradient(135deg, var(--pink), var(--purple));
-      color: #fff; box-shadow: 0 8px 40px var(--glow-pink);
-    }
-    .btn-dl.apk:hover { transform: translateY(-4px); box-shadow: 0 16px 64px var(--glow-pink); }
-    .btn-dl.github {
-      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.15);
-      color: var(--text); backdrop-filter: blur(12px);
-    }
-    .btn-dl.github:hover { background: rgba(255,255,255,.1); transform: translateY(-4px); }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
 
-    .version-info { margin-top: 20px; font-size: 13px; color: var(--muted); }
-    .version-badge { display: inline-flex; align-items: center; gap: 6px; }
-    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #34d399; animation: pulse 2s infinite; }
+        section {
+            padding: 100px 0;
+        }
 
-    /* ─── FOOTER ─── */
-    footer {
-      border-top: 1px solid var(--card-border); padding: 48px 24px;
-      text-align: center; color: var(--muted);
-    }
-    .footer-logo {
-      font-family: 'Sora', sans-serif; font-weight: 800; font-size: 24px;
-      background: linear-gradient(135deg, var(--pink), var(--purple));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      margin-bottom: 12px;
-    }
-    footer p { font-size: 14px; line-height: 1.8; }
-    footer a { color: var(--pink); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 140px 24px 80px;
+        }
 
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 768px) {
-      nav { padding: 14px 20px; }
-      .nav-links { display: none; }
-      .stats-bar { gap: 28px; }
-      .ota-section { padding: 40px 24px; margin: 0; }
-      .download-section { padding: 56px 24px; margin: 0; }
-      .ota-arrow { display: none; }
-      .ota-flow { gap: 20px; }
-    }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            background: rgba(255, 107, 157, 0.1);
+            border: 1px solid rgba(255, 107, 157, 0.3);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--pink);
+            margin-bottom: 28px;
+        }
 
-    /* ─── SCROLL ANIMATIONS ─── */
-    .fade-in { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
-  </style>
+        .hero-badge .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--pink);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: .5;
+                transform: scale(.8);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 900;
+            line-height: 1.0;
+            letter-spacing: -2px;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--pink) 0%, var(--purple) 60%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-sub {
+            font-size: clamp(17px, 2.5vw, 22px);
+            color: var(--muted);
+            max-width: 560px;
+            margin: 0 auto 48px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 34px;
+            border-radius: 50px;
+            text-decoration: none;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            color: #fff;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 8px 40px var(--glow-pink);
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 56px var(--glow-pink);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 34px;
+            border-radius: 50px;
+            text-decoration: none;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            color: var(--text);
+            font-weight: 600;
+            font-size: 16px;
+            transition: background .2s, border-color .2s, transform .2s;
+            backdrop-filter: blur(12px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* ─── PHONE MOCKUP ─── */
+        .hero-phone-wrapper {
+            margin: 64px auto 0;
+            position: relative;
+            width: 280px;
+        }
+
+        .phone-shell {
+            width: 280px;
+            height: 560px;
+            border-radius: 42px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            background: linear-gradient(160deg, #1a0a2e, #0d0a1f);
+            box-shadow:
+                0 0 0 1px rgba(0, 0, 0, .5),
+                0 40px 120px rgba(168, 85, 247, .4),
+                0 0 80px rgba(255, 107, 157, .2),
+                inset 0 1px 0 rgba(255, 255, 255, .12);
+            overflow: hidden;
+            position: relative;
+            animation: phoneFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes phoneFloat {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-1deg);
+            }
+
+            50% {
+                transform: translateY(-14px) rotate(1deg);
+            }
+        }
+
+        .phone-screen {
+            position: absolute;
+            inset: 12px;
+            border-radius: 32px;
+            background: linear-gradient(160deg, #0f0a1e, #1a0530);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            overflow: hidden;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 26px;
+            background: #000;
+            border-radius: 50px;
+            z-index: 10;
+        }
+
+        .phone-ui-item {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 12px 16px;
+            width: 220px;
+        }
+
+        .phone-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .phone-text {
+            flex: 1;
+        }
+
+        .phone-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .phone-msg {
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .phone-heart {
+            font-size: 18px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+        }
+
+        .phone-stats {
+            display: flex;
+            gap: 8px;
+            width: 220px;
+        }
+
+        .phone-stat {
+            flex: 1;
+            background: rgba(255, 107, 157, 0.1);
+            border: 1px solid rgba(255, 107, 157, 0.2);
+            border-radius: 12px;
+            padding: 10px 8px;
+            text-align: center;
+        }
+
+        .phone-stat-num {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--pink);
+        }
+
+        .phone-stat-label {
+            font-size: 9px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* ─── STATS BAR ─── */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+            padding: 48px 24px;
+            border-top: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Sora', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* ─── SECTION HEADER ─── */
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 50px;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--purple);
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(32px, 5vw, 52px);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 16px;
+        }
+
+        .section-title .hl {
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-desc {
+            font-size: 18px;
+            color: var(--muted);
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.65;
+        }
+
+        /* ─── FEATURES GRID ─── */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 32px;
+            backdrop-filter: blur(12px);
+            transition: transform .3s, border-color .3s, box-shadow .3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--glow-pink), transparent 60%);
+            opacity: 0;
+            transition: opacity .3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 107, 157, 0.3);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 20px 60px rgba(255, 107, 157, .15);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, rgba(255, 107, 157, .15), rgba(168, 85, 247, .15));
+            border: 1px solid rgba(255, 107, 157, .2);
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        /* ─── OTA SECTION ─── */
+        .ota-section {
+            background: rgba(10, 10, 30, 0.4);
+            border-radius: 32px;
+            padding: 64px;
+            margin: 0 24px;
+        }
+
+        .ota-flow {
+            display: flex;
+            gap: 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 48px;
+        }
+
+        .ota-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 160px;
+            position: relative;
+        }
+
+        .ota-step-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 107, 157, .15), rgba(168, 85, 247, .2));
+            border: 2px solid rgba(255, 107, 157, .3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 14px;
+            box-shadow: 0 0 30px rgba(255, 107, 157, .15);
+        }
+
+        .ota-step-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .ota-step-desc {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .ota-arrow {
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            padding-bottom: 40px;
+            color: var(--pink);
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        /* ─── GAMES ─── */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+            gap: 12px;
+        }
+
+        .game-chip {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background .2s, border-color .2s, transform .2s;
+        }
+
+        .game-chip:hover {
+            background: rgba(255, 255, 255, .08);
+            border-color: rgba(255, 107, 157, .3);
+            transform: translateY(-3px);
+        }
+
+        .game-chip .game-emoji {
+            font-size: 20px;
+        }
+
+        /* ─── TECH STACK ─── */
+        .tech-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .badge {
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid var(--card-border);
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            transition: border-color .2s, transform .2s;
+        }
+
+        .badge:hover {
+            border-color: rgba(255, 107, 157, .4);
+            transform: translateY(-2px);
+        }
+
+        .badge.accent {
+            border-color: rgba(255, 107, 157, .3);
+            color: var(--pink);
+            background: rgba(255, 107, 157, .07);
+        }
+
+        .badge.purple {
+            border-color: rgba(168, 85, 247, .3);
+            color: var(--purple);
+            background: rgba(168, 85, 247, .07);
+        }
+
+        .badge.blue {
+            border-color: rgba(96, 165, 250, .3);
+            color: #60a5fa;
+            background: rgba(96, 165, 250, .07);
+        }
+
+        .badge.green {
+            border-color: rgba(52, 211, 153, .3);
+            color: #34d399;
+            background: rgba(52, 211, 153, .07);
+        }
+
+        /* ─── DOWNLOAD ─── */
+        .download-section {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 107, 157, .08), rgba(168, 85, 247, .08));
+            border: 1px solid var(--card-border);
+            border-radius: 32px;
+            padding: 80px 40px;
+            margin: 0 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(255, 107, 157, .1) 0%, transparent 70%);
+        }
+
+        .download-section h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(32px, 5vw, 52px);
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .download-section p {
+            font-size: 18px;
+            color: var(--muted);
+            margin-bottom: 40px;
+        }
+
+        .dl-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-dl {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 36px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all .25s;
+        }
+
+        .btn-dl.apk {
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            color: #fff;
+            box-shadow: 0 8px 40px var(--glow-pink);
+        }
+
+        .btn-dl.apk:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 64px var(--glow-pink);
+        }
+
+        .btn-dl.github {
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .15);
+            color: var(--text);
+            backdrop-filter: blur(12px);
+        }
+
+        .btn-dl.github:hover {
+            background: rgba(255, 255, 255, .1);
+            transform: translateY(-4px);
+        }
+
+        .version-info {
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #34d399;
+            animation: pulse 2s infinite;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            border-top: 1px solid var(--card-border);
+            padding: 48px 24px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .footer-logo {
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: 24px;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        footer p {
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        footer a {
+            color: var(--pink);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            nav {
+                padding: 14px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .stats-bar {
+                gap: 28px;
+            }
+
+            .ota-section {
+                padding: 40px 24px;
+                margin: 0;
+            }
+
+            .download-section {
+                padding: 56px 24px;
+                margin: 0;
+            }
+
+            .ota-arrow {
+                display: none;
+            }
+
+            .ota-flow {
+                gap: 20px;
+            }
+        }
+
+        /* ─── SCROLL ANIMATIONS ─── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
+
 <body>
 
-<!-- Floating orbs background -->
-<div class="bg-orbs">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-</div>
+    <!-- Floating orbs background -->
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
 
-<!-- Navigation -->
-<nav>
-  <div class="nav-logo">
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <path d="M14 23s-8-5-8-11a6 6 0 0 1 8-5.7A6 6 0 0 1 22 12c0 6-8 11-8 11Z" fill="url(#hg)" />
-      <defs><linearGradient id="hg" x1="6" y1="6" x2="22" y2="23" gradientUnits="userSpaceOnUse"><stop stop-color="#ff6b9d"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
-    </svg>
-    BondSpace
-  </div>
-  <div class="nav-links">
-    <a href="#features">Features</a>
-    <a href="#ota">Auto-Update</a>
-    <a href="#games">Games</a>
-    <a href="#download">Download</a>
-  </div>
-  <a href="#download" class="nav-cta">⬇ Get APK</a>
-</nav>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-logo">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M14 23s-8-5-8-11a6 6 0 0 1 8-5.7A6 6 0 0 1 22 12c0 6-8 11-8 11Z" fill="url(#hg)" />
+                <defs>
+                    <linearGradient id="hg" x1="6" y1="6" x2="22" y2="23" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#ff6b9d" />
+                        <stop offset="1" stop-color="#a855f7" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            BondSpace
+        </div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#ota">Auto-Update</a>
+            <a href="#games">Games</a>
+            <a href="#download">Download</a>
+        </div>
+        <a href="#download" class="nav-cta">⬇ Get APK</a>
+    </nav>
 
-<main>
+    <main>
 
-  <!-- ── HERO ── -->
-  <section class="hero">
-    <div>
-      <div class="hero-badge">
-        <span class="dot"></span> Version 1.0 — Now on Android
-      </div>
-      <h1>
-        Your Private<br/>
-        <span class="gradient">Love Universe</span>
-      </h1>
-      <p class="hero-sub">
-        BondSpace is the encrypted relationship super-app for couples and close friends — chat, play games, share moments, and grow together.
-      </p>
-      <div class="hero-actions">
-        <a href="#download" class="btn-primary">
-          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.59V7a1 1 0 0 0-2 0v9.59l-3.29-3.3a1 1 0 0 0-1.42 1.42l5 5a1 1 0 0 0 1.42 0l5-5a1 1 0 0 0-1.42-1.42z"/></svg>
-          Download APK
-        </a>
-        <a href="https://github.com/Ashwinjauhary/bondspace" target="_blank" class="btn-secondary">
-          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          View Source
-        </a>
-      </div>
+        <!-- ── HERO ── -->
+        <section class="hero">
+            <div>
+                <div class="hero-badge">
+                    <span class="dot"></span> Version 1.0 — Now on Android
+                </div>
+                <h1>
+                    Your Private<br />
+                    <span class="gradient">Love Universe</span>
+                </h1>
+                <p class="hero-sub">
+                    BondSpace is the encrypted relationship super-app for couples and close friends — chat, play games,
+                    share moments, and grow together.
+                </p>
+                <div class="hero-actions">
+                    <a href="#download" class="btn-primary">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.59V7a1 1 0 0 0-2 0v9.59l-3.29-3.3a1 1 0 0 0-1.42 1.42l5 5a1 1 0 0 0 1.42 0l5-5a1 1 0 0 0-1.42-1.42z" />
+                        </svg>
+                        Download APK
+                    </a>
+                    <a href="https://github.com/Ashwinjauhary/bondspace" target="_blank" class="btn-secondary">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                        </svg>
+                        View Source
+                    </a>
+                </div>
 
-      <!-- Phone mockup -->
-      <div class="hero-phone-wrapper">
-        <div class="phone-shell">
-          <div class="phone-notch"></div>
-          <div class="phone-screen" style="padding-top:50px; gap:10px;">
-            <div class="phone-ui-item">
-              <div class="phone-avatar">👩</div>
-              <div class="phone-text">
-                <div class="phone-name">Priya</div>
-                <div class="phone-msg">💌 New love letter unlocked!</div>
-              </div>
-              <span class="phone-heart">❤️</span>
+                <!-- Phone mockup -->
+                <div class="hero-phone-wrapper">
+                    <div class="phone-shell">
+                        <div class="phone-notch"></div>
+                        <div class="phone-screen" style="padding-top:50px; gap:10px;">
+                            <div class="phone-ui-item">
+                                <div class="phone-avatar">👩</div>
+                                <div class="phone-text">
+                                    <div class="phone-name">Priya</div>
+                                    <div class="phone-msg">💌 New love letter unlocked!</div>
+                                </div>
+                                <span class="phone-heart">❤️</span>
+                            </div>
+                            <div class="phone-ui-item">
+                                <div class="phone-avatar" style="background:linear-gradient(135deg,#4f46e5,#a855f7);">🎮
+                                </div>
+                                <div class="phone-text">
+                                    <div class="phone-name">You won Truth or Dare!</div>
+                                    <div class="phone-msg">+50 XP earned 🏆</div>
+                                </div>
+                            </div>
+                            <div class="phone-ui-item">
+                                <div class="phone-avatar" style="background:linear-gradient(135deg,#059669,#10b981);">📍
+                                </div>
+                                <div class="phone-text">
+                                    <div class="phone-name">Priya reached home</div>
+                                    <div class="phone-msg">Safe & sound ✅</div>
+                                </div>
+                            </div>
+                            <div class="phone-stats">
+                                <div class="phone-stat">
+                                    <div class="phone-stat-num">❤️ 365</div>
+                                    <div class="phone-stat-label">Days Together</div>
+                                </div>
+                                <div class="phone-stat">
+                                    <div class="phone-stat-num">Lv.12</div>
+                                    <div class="phone-stat-label">Bond Level</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="phone-ui-item">
-              <div class="phone-avatar" style="background:linear-gradient(135deg,#4f46e5,#a855f7);">🎮</div>
-              <div class="phone-text">
-                <div class="phone-name">You won Truth or Dare!</div>
-                <div class="phone-msg">+50 XP earned 🏆</div>
-              </div>
+        </section>
+
+        <!-- ── STATS ── -->
+        <div class="stats-bar fade-in">
+            <div class="stat-item">
+                <div class="stat-num">20+</div>
+                <div class="stat-label">Love-Themed Games</div>
             </div>
-            <div class="phone-ui-item">
-              <div class="phone-avatar" style="background:linear-gradient(135deg,#059669,#10b981);">📍</div>
-              <div class="phone-text">
-                <div class="phone-name">Priya reached home</div>
-                <div class="phone-msg">Safe & sound ✅</div>
-              </div>
+            <div class="stat-item">
+                <div class="stat-num">E2E</div>
+                <div class="stat-label">Encrypted Chat</div>
             </div>
-            <div class="phone-stats">
-              <div class="phone-stat">
-                <div class="phone-stat-num">❤️ 365</div>
-                <div class="phone-stat-label">Days Together</div>
-              </div>
-              <div class="phone-stat">
-                <div class="phone-stat-num">Lv.12</div>
-                <div class="phone-stat-label">Bond Level</div>
-              </div>
+            <div class="stat-item">
+                <div class="stat-num">OTA</div>
+                <div class="stat-label">Auto-Updates</div>
             </div>
-          </div>
+            <div class="stat-item">
+                <div class="stat-num">∞</div>
+                <div class="stat-label">Shared Memories</div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ── STATS ── -->
-  <div class="stats-bar fade-in">
-    <div class="stat-item"><div class="stat-num">20+</div><div class="stat-label">Love-Themed Games</div></div>
-    <div class="stat-item"><div class="stat-num">E2E</div><div class="stat-label">Encrypted Chat</div></div>
-    <div class="stat-item"><div class="stat-num">OTA</div><div class="stat-label">Auto-Updates</div></div>
-    <div class="stat-item"><div class="stat-num">∞</div><div class="stat-label">Shared Memories</div></div>
-  </div>
+        <!-- ── FEATURES ── -->
+        <section id="features">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <div class="section-tag">Features</div>
+                    <h2 class="section-title">Everything your <span class="hl">relationship needs</span></h2>
+                    <p class="section-desc">One app to chat, play, share, grow, and love — privately and securely.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">🔐</div>
+                        <div class="feature-title">End-to-End Encrypted Chat</div>
+                        <div class="feature-desc">Messages encrypted with libsodium NaCl. Voice notes, image sharing,
+                            reactions, pinned messages, and disappearing messages.</div>
+                    </div>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">📍</div>
+                        <div class="feature-title">Real-Time Location Sharing</div>
+                        <div class="feature-desc">Live GPS sharing on Leaflet maps with mutual consent. "Reached home"
+                            alerts, battery tracking, and location history.</div>
+                    </div>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">🎮</div>
+                        <div class="feature-title">20+ Love-Themed Games</div>
+                        <div class="feature-desc">Truth or Dare, Who Knows Me Better, Love Bingo, Memory Match, Story
+                            Builder, and 15 more relationship mini-games.</div>
+                    </div>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">🌳</div>
+                        <div class="feature-title">Bond Tree & Timeline</div>
+                        <div class="feature-desc">A living visual timeline of your relationship milestones. Attach
+                            photos, set dates, and watch your tree grow.</div>
+                    </div>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">🤖</div>
+                        <div class="feature-title">Love Guru AI</div>
+                        <div class="feature-desc">Your private AI relationship advisor for advice, conflict resolution,
+                            date ideas, and a full relationship health score.</div>
+                    </div>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">🏆</div>
+                        <div class="feature-title">Gamification & Love Arena</div>
+                        <div class="feature-desc">Earn XP, level up your bond, and unlock custom sticker packs, profile
+                            frames, themes, and emoji packs in the Arena store.</div>
+                    </div>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">💌</div>
+                        <div class="feature-title">Digital Love Letters</div>
+                        <div class="feature-desc">Write time-locked encrypted letters. Set them to unlock on
+                            anniversaries, birthdays, or any custom date.</div>
+                    </div>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">🖼️</div>
+                        <div class="feature-title">Shared Gallery</div>
+                        <div class="feature-desc">Album templates (First Meet, Trips, Food, Custom) powered by
+                            Cloudinary CDN for photos and videos.</div>
+                    </div>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">🌍</div>
+                        <div class="feature-title">Community Spaces</div>
+                        <div class="feature-desc">Anonymous 1-on-1 chats and group communities — Coding Couples, Long
+                            Distance Love, Marriage Planning, and more.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <!-- ── FEATURES ── -->
-  <section id="features">
-    <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-tag">Features</div>
-        <h2 class="section-title">Everything your <span class="hl">relationship needs</span></h2>
-        <p class="section-desc">One app to chat, play, share, grow, and love — privately and securely.</p>
-      </div>
-      <div class="features-grid">
-        <div class="feature-card fade-in">
-          <div class="feature-icon">🔐</div>
-          <div class="feature-title">End-to-End Encrypted Chat</div>
-          <div class="feature-desc">Messages encrypted with libsodium NaCl. Voice notes, image sharing, reactions, pinned messages, and disappearing messages.</div>
-        </div>
-        <div class="feature-card fade-in">
-          <div class="feature-icon">📍</div>
-          <div class="feature-title">Real-Time Location Sharing</div>
-          <div class="feature-desc">Live GPS sharing on Leaflet maps with mutual consent. "Reached home" alerts, battery tracking, and location history.</div>
-        </div>
-        <div class="feature-card fade-in">
-          <div class="feature-icon">🎮</div>
-          <div class="feature-title">20+ Love-Themed Games</div>
-          <div class="feature-desc">Truth or Dare, Who Knows Me Better, Love Bingo, Memory Match, Story Builder, and 15 more relationship mini-games.</div>
-        </div>
-        <div class="feature-card fade-in">
-          <div class="feature-icon">🌳</div>
-          <div class="feature-title">Bond Tree & Timeline</div>
-          <div class="feature-desc">A living visual timeline of your relationship milestones. Attach photos, set dates, and watch your tree grow.</div>
-        </div>
-        <div class="feature-card fade-in">
-          <div class="feature-icon">🤖</div>
-          <div class="feature-title">Love Guru AI</div>
-          <div class="feature-desc">Your private AI relationship advisor for advice, conflict resolution, date ideas, and a full relationship health score.</div>
-        </div>
-        <div class="feature-card fade-in">
-          <div class="feature-icon">🏆</div>
-          <div class="feature-title">Gamification & Love Arena</div>
-          <div class="feature-desc">Earn XP, level up your bond, and unlock custom sticker packs, profile frames, themes, and emoji packs in the Arena store.</div>
-        </div>
-        <div class="feature-card fade-in">
-          <div class="feature-icon">💌</div>
-          <div class="feature-title">Digital Love Letters</div>
-          <div class="feature-desc">Write time-locked encrypted letters. Set them to unlock on anniversaries, birthdays, or any custom date.</div>
-        </div>
-        <div class="feature-card fade-in">
-          <div class="feature-icon">🖼️</div>
-          <div class="feature-title">Shared Gallery</div>
-          <div class="feature-desc">Album templates (First Meet, Trips, Food, Custom) powered by Cloudinary CDN for photos and videos.</div>
-        </div>
-        <div class="feature-card fade-in">
-          <div class="feature-icon">🌍</div>
-          <div class="feature-title">Community Spaces</div>
-          <div class="feature-desc">Anonymous 1-on-1 chats and group communities — Coding Couples, Long Distance Love, Marriage Planning, and more.</div>
-        </div>
-      </div>
-    </div>
-  </section>
+        <!-- ── OTA AUTO-UPDATE ── -->
+        <section id="ota">
+            <div class="container">
+                <div class="ota-section fade-in">
+                    <div class="section-header">
+                        <div class="section-tag">Auto-Update</div>
+                        <h2 class="section-title">Install once.<br /><span class="hl">Always up-to-date.</span></h2>
+                        <p class="section-desc">BondSpace updates itself silently in the background — no app store, no
+                            reinstall, no hassle.</p>
+                    </div>
+                    <div class="ota-flow">
+                        <div class="ota-step">
+                            <div class="ota-step-icon">👨‍💻</div>
+                            <div class="ota-step-title">Dev pushes code</div>
+                            <div class="ota-step-desc">A commit lands on the main branch</div>
+                        </div>
+                        <div class="ota-arrow">→</div>
+                        <div class="ota-step">
+                            <div class="ota-step-icon">⚙️</div>
+                            <div class="ota-step-title">GitHub Actions</div>
+                            <div class="ota-step-desc">Automatically builds web bundle + APK</div>
+                        </div>
+                        <div class="ota-arrow">→</div>
+                        <div class="ota-step">
+                            <div class="ota-step-icon">☁️</div>
+                            <div class="ota-step-title">Bundle published</div>
+                            <div class="ota-step-desc">bundle.zip uploaded to GitHub Releases</div>
+                        </div>
+                        <div class="ota-arrow">→</div>
+                        <div class="ota-step">
+                            <div class="ota-step-icon">📱</div>
+                            <div class="ota-step-title">App checks on launch</div>
+                            <div class="ota-step-desc">Silently downloads & applies new bundle</div>
+                        </div>
+                        <div class="ota-arrow">→</div>
+                        <div class="ota-step">
+                            <div class="ota-step-icon">✨</div>
+                            <div class="ota-step-title">You're updated!</div>
+                            <div class="ota-step-desc">No reinstall, no user action needed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <!-- ── OTA AUTO-UPDATE ── -->
-  <section id="ota">
-    <div class="container">
-      <div class="ota-section fade-in">
-        <div class="section-header">
-          <div class="section-tag">Auto-Update</div>
-          <h2 class="section-title">Install once.<br/><span class="hl">Always up-to-date.</span></h2>
-          <p class="section-desc">BondSpace updates itself silently in the background — no app store, no reinstall, no hassle.</p>
-        </div>
-        <div class="ota-flow">
-          <div class="ota-step">
-            <div class="ota-step-icon">👨‍💻</div>
-            <div class="ota-step-title">Dev pushes code</div>
-            <div class="ota-step-desc">A commit lands on the main branch</div>
-          </div>
-          <div class="ota-arrow">→</div>
-          <div class="ota-step">
-            <div class="ota-step-icon">⚙️</div>
-            <div class="ota-step-title">GitHub Actions</div>
-            <div class="ota-step-desc">Automatically builds web bundle + APK</div>
-          </div>
-          <div class="ota-arrow">→</div>
-          <div class="ota-step">
-            <div class="ota-step-icon">☁️</div>
-            <div class="ota-step-title">Bundle published</div>
-            <div class="ota-step-desc">bundle.zip uploaded to GitHub Releases</div>
-          </div>
-          <div class="ota-arrow">→</div>
-          <div class="ota-step">
-            <div class="ota-step-icon">📱</div>
-            <div class="ota-step-title">App checks on launch</div>
-            <div class="ota-step-desc">Silently downloads & applies new bundle</div>
-          </div>
-          <div class="ota-arrow">→</div>
-          <div class="ota-step">
-            <div class="ota-step-icon">✨</div>
-            <div class="ota-step-title">You're updated!</div>
-            <div class="ota-step-desc">No reinstall, no user action needed</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+        <!-- ── GAMES ── -->
+        <section id="games">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <div class="section-tag">Game Library</div>
+                    <h2 class="section-title">20+ <span class="hl">Love-Themed Games</span></h2>
+                    <p class="section-desc">Play together in real-time and earn XP for your bond.</p>
+                </div>
+                <div class="games-grid fade-in">
+                    <div class="game-chip"><span class="game-emoji">🧠</span> Who Knows Me Better</div>
+                    <div class="game-chip"><span class="game-emoji">⚡</span> Rapid Questions</div>
+                    <div class="game-chip"><span class="game-emoji">🎯</span> Truth or Dare</div>
+                    <div class="game-chip"><span class="game-emoji">😂</span> Guess the Emoji</div>
+                    <div class="game-chip"><span class="game-emoji">🗳️</span> This or That</div>
+                    <div class="game-chip"><span class="game-emoji">📖</span> Story Builder</div>
+                    <div class="game-chip"><span class="game-emoji">🎱</span> Love Bingo</div>
+                    <div class="game-chip"><span class="game-emoji">🧩</span> Couple Puzzle</div>
+                    <div class="game-chip"><span class="game-emoji">🌟</span> Personality Challenge</div>
+                    <div class="game-chip"><span class="game-emoji">💑</span> Compatibility Test</div>
+                    <div class="game-chip"><span class="game-emoji">💬</span> Love Language Quiz</div>
+                    <div class="game-chip"><span class="game-emoji">😍</span> Mood Guessing Game</div>
+                    <div class="game-chip"><span class="game-emoji">🔮</span> Predict Partner</div>
+                    <div class="game-chip"><span class="game-emoji">🃏</span> Memory Match</div>
+                    <div class="game-chip"><span class="game-emoji">📸</span> Photo Guess</div>
+                    <div class="game-chip"><span class="game-emoji">🗳️</span> Secret Vote</div>
+                    <div class="game-chip"><span class="game-emoji">🗺️</span> Future Planning Quiz</div>
+                    <div class="game-chip"><span class="game-emoji">🤫</span> Random Confession</div>
+                    <div class="game-chip"><span class="game-emoji">📅</span> Daily Question</div>
+                    <div class="game-chip"><span class="game-emoji">🏆</span> Couple Trivia</div>
+                </div>
+            </div>
+        </section>
 
-  <!-- ── GAMES ── -->
-  <section id="games">
-    <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-tag">Game Library</div>
-        <h2 class="section-title">20+ <span class="hl">Love-Themed Games</span></h2>
-        <p class="section-desc">Play together in real-time and earn XP for your bond.</p>
-      </div>
-      <div class="games-grid fade-in">
-        <div class="game-chip"><span class="game-emoji">🧠</span> Who Knows Me Better</div>
-        <div class="game-chip"><span class="game-emoji">⚡</span> Rapid Questions</div>
-        <div class="game-chip"><span class="game-emoji">🎯</span> Truth or Dare</div>
-        <div class="game-chip"><span class="game-emoji">😂</span> Guess the Emoji</div>
-        <div class="game-chip"><span class="game-emoji">🗳️</span> This or That</div>
-        <div class="game-chip"><span class="game-emoji">📖</span> Story Builder</div>
-        <div class="game-chip"><span class="game-emoji">🎱</span> Love Bingo</div>
-        <div class="game-chip"><span class="game-emoji">🧩</span> Couple Puzzle</div>
-        <div class="game-chip"><span class="game-emoji">🌟</span> Personality Challenge</div>
-        <div class="game-chip"><span class="game-emoji">💑</span> Compatibility Test</div>
-        <div class="game-chip"><span class="game-emoji">💬</span> Love Language Quiz</div>
-        <div class="game-chip"><span class="game-emoji">😍</span> Mood Guessing Game</div>
-        <div class="game-chip"><span class="game-emoji">🔮</span> Predict Partner</div>
-        <div class="game-chip"><span class="game-emoji">🃏</span> Memory Match</div>
-        <div class="game-chip"><span class="game-emoji">📸</span> Photo Guess</div>
-        <div class="game-chip"><span class="game-emoji">🗳️</span> Secret Vote</div>
-        <div class="game-chip"><span class="game-emoji">🗺️</span> Future Planning Quiz</div>
-        <div class="game-chip"><span class="game-emoji">🤫</span> Random Confession</div>
-        <div class="game-chip"><span class="game-emoji">📅</span> Daily Question</div>
-        <div class="game-chip"><span class="game-emoji">🏆</span> Couple Trivia</div>
-      </div>
-    </div>
-  </section>
+        <!-- ── TECH STACK ── -->
+        <section>
+            <div class="container">
+                <div class="section-header fade-in">
+                    <div class="section-tag">Tech Stack</div>
+                    <h2 class="section-title">Built with <span class="hl">best-in-class</span> tech</h2>
+                </div>
+                <div class="tech-badges fade-in">
+                    <span class="badge accent">Next.js 16</span>
+                    <span class="badge accent">React 19</span>
+                    <span class="badge purple">TypeScript</span>
+                    <span class="badge purple">Capacitor 6</span>
+                    <span class="badge purple">Tailwind CSS v4</span>
+                    <span class="badge blue">Socket.IO</span>
+                    <span class="badge blue">PostgreSQL</span>
+                    <span class="badge blue">Redis</span>
+                    <span class="badge green">Node.js 18+</span>
+                    <span class="badge green">Express.js 5</span>
+                    <span class="badge accent">libsodium (E2E)</span>
+                    <span class="badge purple">Cloudinary CDN</span>
+                    <span class="badge blue">Leaflet Maps</span>
+                    <span class="badge green">Framer Motion</span>
+                    <span class="badge accent">Zustand</span>
+                    <span class="badge purple">JWT Auth</span>
+                    <span class="badge blue">GitHub Actions CI/CD</span>
+                    <span class="badge green">OTA Auto-Update</span>
+                </div>
+            </div>
+        </section>
 
-  <!-- ── TECH STACK ── -->
-  <section>
-    <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-tag">Tech Stack</div>
-        <h2 class="section-title">Built with <span class="hl">best-in-class</span> tech</h2>
-      </div>
-      <div class="tech-badges fade-in">
-        <span class="badge accent">Next.js 16</span>
-        <span class="badge accent">React 19</span>
-        <span class="badge purple">TypeScript</span>
-        <span class="badge purple">Capacitor 6</span>
-        <span class="badge purple">Tailwind CSS v4</span>
-        <span class="badge blue">Socket.IO</span>
-        <span class="badge blue">PostgreSQL</span>
-        <span class="badge blue">Redis</span>
-        <span class="badge green">Node.js 18+</span>
-        <span class="badge green">Express.js 5</span>
-        <span class="badge accent">libsodium (E2E)</span>
-        <span class="badge purple">Cloudinary CDN</span>
-        <span class="badge blue">Leaflet Maps</span>
-        <span class="badge green">Framer Motion</span>
-        <span class="badge accent">Zustand</span>
-        <span class="badge purple">JWT Auth</span>
-        <span class="badge blue">GitHub Actions CI/CD</span>
-        <span class="badge green">OTA Auto-Update</span>
-      </div>
-    </div>
-  </section>
+        <!-- ── DOWNLOAD ── -->
+        <section id="download">
+            <div class="container">
+                <div class="download-section fade-in">
+                    <h2>Ready to Bond? 💖</h2>
+                    <p>Download the APK and install it on your Android phone.<br />No Play Store — just pure love.</p>
+                    <div class="dl-buttons">
+                        <a href="BondSpace.apk" download class="btn-dl apk">
+                            <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.59V7a1 1 0 0 0-2 0v9.59l-3.29-3.3a1 1 0 0 0-1.42 1.42l5 5a1 1 0 0 0 1.42 0l5-5a1 1 0 0 0-1.42-1.42z" />
+                            </svg>
+                            Download BondSpace.apk
+                        </a>
+                        <a href="https://github.com/Ashwinjauhary/bondspace" target="_blank" class="btn-dl github">
+                            <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                            </svg>
+                            View Source on GitHub
+                        </a>
+                    </div>
+                    <div class="version-info">
+                        <span class="version-badge">
+                            <span class="live-dot"></span>
+                            Always the latest version — OTA auto-updates enabled
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <!-- ── DOWNLOAD ── -->
-  <section id="download">
-    <div class="container">
-      <div class="download-section fade-in">
-        <h2>Ready to Bond? 💖</h2>
-        <p>Download the APK and install it on your Android phone.<br/>No Play Store — just pure love.</p>
-        <div class="dl-buttons">
-          <a href="BondSpace.apk" download class="btn-dl apk">
-            <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.59V7a1 1 0 0 0-2 0v9.59l-3.29-3.3a1 1 0 0 0-1.42 1.42l5 5a1 1 0 0 0 1.42 0l5-5a1 1 0 0 0-1.42-1.42z"/></svg>
-            Download BondSpace.apk
-          </a>
-          <a href="https://github.com/Ashwinjauhary/bondspace" target="_blank" class="btn-dl github">
-            <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-            View Source on GitHub
-          </a>
-        </div>
-        <div class="version-info">
-          <span class="version-badge">
-            <span class="live-dot"></span>
-            Always the latest version — OTA auto-updates enabled
-          </span>
-        </div>
-      </div>
-    </div>
-  </section>
+    </main>
 
-</main>
+    <footer>
+        <div class="footer-logo">💖 BondSpace</div>
+        <p>
+            Made with love for every couple on Earth<br />
+            <a href="https://github.com/Ashwinjauhary/bondspace" target="_blank">GitHub</a>
+            &nbsp;·&nbsp;
+            <a href="mailto:ashwinjauhary@gmail.com">Contact</a>
+            &nbsp;·&nbsp; MIT License
+        </p>
+    </footer>
 
-<footer>
-  <div class="footer-logo">💖 BondSpace</div>
-  <p>
-    Made with love for every couple on Earth<br/>
-    <a href="https://github.com/Ashwinjauhary/bondspace" target="_blank">GitHub</a>
-    &nbsp;·&nbsp;
-    <a href="mailto:ashwinjauhary@gmail.com">Contact</a>
-    &nbsp;·&nbsp; MIT License
-  </p>
-</footer>
+    <script>
+        // Scroll-triggered fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-<script>
-  // Scroll-triggered fade-in animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-</script>
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
 
 </body>
+
 </html>
